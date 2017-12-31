@@ -70,7 +70,15 @@ namespace Boukenken.Gdax
 
         protected virtual T Deserialize<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json);
+            try {
+                return JsonConvert.DeserializeObject<T>(json);
+            } catch (Exception ex) {
+                throw new ReplyParseException(json, ex);
+            }
         }
+    }
+
+    public class ReplyParseException : Exception {
+        public ReplyParseException(string reply, Exception ex) : base($"Reply:\r\n{reply}", ex) { }
     }
 }
